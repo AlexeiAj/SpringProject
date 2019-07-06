@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html xmlns:th="http://thymeleaf.org/">
+
+	<head>
+		<meta charset="UTF-8"/>
+		<meta name="viewport" content="width=device-width, user-scalable=no"/>
+		<link href="webjars/bootstrap/4.1.3/css/bootstrap.min.css" rel="stylesheet"/>
+	</head>
+
+	<body>
+		<div class="container">
+			<div class="position-relative overflow-hidden text-center bg-dark text-white" style="background-image: url(/images/header2.jpg);">
+				<img th:src="@{'/images/logo.png'}" class="img-fluid p-3 p-md-5">
+			</div>
+			<h1 th:text="#{label.cadastro.de.usuarios}"></h1>
+			<p class="lead" th:text="#{label.lista.usuarios}"></p>
+	
+			<div class="row">
+				<div class="col-md-12">
+					<div th:fragment="fragment-usuarios" id="usuarios">
+						<div th:if="${usuarios} and !${usuarios.empty}">
+							<table class="table table-hover">
+								<thead>
+									<tr>
+										<th th:text="#{label.id}"></th>
+										<th th:text="#{label.login}"></th>
+										<th th:text="#{label.senha}"></th>
+										<th th:text="#{label.acoes}"></th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr th:each="usuario : ${usuarios}" class="linha">
+										<td><span th:text="${usuario.id}"></span></td>
+										<td><span th:text="${usuario.login}"></span></td>
+										<td><span th:text="${usuario.senha}"></span></td>
+										<td>
+											<div class="btn-group" role="group" aria-label="Basic example">
+								                <button type="button" class="btn btn-outline-light buttonAlterar"><img th:src="@{'/images/baseline-edit-24px.svg'}"/></button>
+								                <button type="button" class="btn btn-outline-light buttonRemover"><img th:src="@{'/images/baseline-delete-24px.svg'}"/></button>
+												<input type="hidden" class="id" th:value="${usuario.id}"/>
+							                </div>			
+	                					</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+						<div th:if="!${usuarios} or ${usuarios.empty}">
+							<hr/>
+							<small th:text="#{label.sem.resultado}" style="margin-left: 50px;"></small>
+							<hr/>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+			<div class="col-md-12">
+				<a class="btn btn-dark" href="/login"><span th:text="#{label.entrar}"></span></a>
+				<button type="button" class="btn btn-dark" data-toggle="modal" id="buttonAdicionar"><span th:text="#{label.adicionar}"></span></button>
+			</div>
+			
+			<br/><br/><hr/>
+			<footer class="footer">
+				<p th:text="#{label.footer.dev}"></p>
+			</footer>
+		</div>
+	
+		<script src="webjars/jquery/3.1.1/jquery.min.js"></script>
+		<script src="webjars/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+	</body>
+	
+	<div class="modal" id="modalAdicionar">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div th:fragment="fragment-form">
+					<form action="" th:action="@{/adicionarUsuarioAjax}" th:method="post" th:object="${usuario}" >
+						<div id="formBodyAdicionar">
+							<div class="modal-header">
+								<h4 class="modal-title" th:text="#{label.adicionar.usuario}"></h4>
+								<button type="button" class="close" data-dismiss="modal">&times;</button>
+							</div>
+					
+							<div class="modal-body">
+								<div class="form-group">
+									<label th:text="#{label.login}"></label>
+									<input type="text" class="form-control" th:placeholder="#{label.login}" th:field="*{login}"/>
+									<small class="form-text text-muted" th:if="${#fields.hasErrors('login')}" th:classappend="${#fields.hasErrors('senha')} ? has-error" th:errors="*{login}"></small>
+								</div>
+								<div class="form-group">
+									<label th:text="#{label.senha}"></label>
+								    <input type="text" class="form-control" th:placeholder="#{label.senha}" th:field="*{senha}"/>
+								    <small class="form-text text-muted" th:classappend="${#fields.hasErrors('senha')} ? has-error" th:if="${#fields.hasErrors('senha')}" th:errors="*{senha}"></small>
+								</div>
+								<button type="submit" class="btn btn-dark" th:text="#{label.salvar}"></button>
+							</div>
+						</div>
+					</form>
+				</div>
+				
+				<div class="modal-footer">
+					<button type="button" class="btn btn-dark" data-dismiss="modal" th:text="#{label.fechar}"></button>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<div class="modal" id="modalAlterar">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div th:fragment="fragment-form">
+					<form action="" th:action="@{/alterarUsuarioAjax}" th:method="put" th:object="${usuario}" >
+						<div id="formBodyAlterar">
+							<div class="modal-header">
+								<h4 class="modal-title" th:text="#{label.alterar.usuario}"></h4>
+								<button type="button" class="close" data-dismiss="modal">&times;</button>
+							</div>
+					
+							<div class="modal-body">
+								<div class="form-group">
+									<label th:text="#{label.login}"></label>
+									<input type="text" class="form-control" th:placeholder="#{label.login}" th:field="*{login}"/>
+									<small class="form-text text-muted" th:if="${#fields.hasErrors('login')}" th:classappend="${#fields.hasErrors('senha')} ? has-error" th:errors="*{login}"></small>
+								</div>
+								<div class="form-group">
+									<label th:text="#{label.senha}"></label>
+								    <input type="text" class="form-control" th:placeholder="#{label.senha}" th:field="*{senha}"/>
+								    <small class="form-text text-muted" th:classappend="${#fields.hasErrors('senha')} ? has-error" th:if="${#fields.hasErrors('senha')}" th:errors="*{senha}"></small>
+								</div>
+								
+								<input type="hidden" th:value="${usuario.id}" th:field="*{id}"/>
+								<button type="submit" class="btn btn-dark" th:text="#{label.salvar}"></button>
+							</div>
+						</div>
+					</form>
+				</div>
+				
+				<div class="modal-footer">
+					<button type="button" class="btn btn-dark" data-dismiss="modal" th:text="#{label.fechar}"></button>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<div class="modal" id="modalConsultar">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div th:fragment="fragment-form">
+					<div id="bodyConsultar">
+						<div class="modal-header">
+							<h4 class="modal-title" th:text="#{label.consultar.usuario}"></h4>
+							<button type="button" class="close" data-dismiss="modal">&times;</button>
+						</div>
+				
+						<div class="modal-body">
+							<div class="form-group">
+								<b><label th:text="#{label.login}"></label></b>
+								<span th:text="${usuario.login}"></span>
+							</div>
+							<div class="form-group">
+								<b><label th:text="#{label.senha}"></label></b>
+							    <span th:text="${usuario.senha}"></span>
+							</div>
+							
+							<input type="hidden" th:value="${usuario.id}"/>
+						</div>
+					</div>
+				</div>
+				
+				<div class="modal-footer">
+					<button type="button" class="btn btn-dark" data-dismiss="modal" th:text="#{label.fechar}"></button>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<script>
+		$(function() {
+			modalAdicionar();
+			modalAlterar();
+			buttonRemover();
+			buttonConsultar();
+		});
+		
+		function limparModal(){
+			$('.has-error').removeClass('has-error');
+			$('.form-group :input').val('');
+			$('.form-group small').text('');
+		}
+		
+		function modalAdicionar(){
+			if($('#modalAdicionar').find('.text-muted').val() == "") $('#modalAdicionar').modal();
+			var $form = $('#modalAdicionar').find('form');
+			
+			$form.on('submit', function(e) {
+				e.preventDefault();
+			  	$.ajax({
+				    url: $form.attr('action'),
+				    type: $form.attr('method'),
+				    data: $form.serialize(),
+				    success: function(response) {
+				    	if ($(response).find('.has-error').length) $form.find('#formBodyAdicionar').replaceWith($(response).find('#formBodyAdicionar'));
+				    	else $('#modalAdicionar').modal('hide');
+			      		carregarUsuariosAjax();
+				    }
+			  	});
+			});
+			
+			buttonAdicionar();
+		}
+		
+		function buttonAdicionar(){
+			$('#buttonAdicionar').on('click', function(e) {
+				limparModal();
+				$('#modalAdicionar').modal();
+			});
+		}
+		
+		function modalAlterar(){
+			if($('#modalAlterar').find('.text-muted').val() == "") $('#modalAlterar').modal();
+			var $form = $('#modalAlterar').find('form');
+			
+			$form.on('submit', function(e) {
+				e.preventDefault();
+			  	$.ajax({
+				    url: $form.attr('action'),
+				    type: $form.attr('method'),
+				    data: $form.serialize(),
+				    success: function(response) {
+				    	if ($(response).find('.has-error').length) $form.find('#formBodyAlterar').replaceWith($(response).find('#formBodyAlterar'));
+				    	else $('#modalAlterar').modal('hide');
+			      		carregarUsuariosAjax();
+				    }
+			  	});
+			});
+			
+			buttonAlterar();
+		}
+		
+		function buttonAlterar(){
+			$('body').on('click', '.buttonAlterar', function(event) {
+				event.stopPropagation();
+				limparModal();
+				carregarUsuarioAjax($(this).siblings('.id').val(), 'modalAlterar', 'formBodyAlterar');
+			});
+		}
+		
+		function buttonConsultar(id){
+			$('body').on('click', '.linha', function(event) {
+				limparModal();
+				carregarUsuarioAjax($(this).find('.id').val(), 'modalConsultar', 'bodyConsultar');
+			});
+		}
+		
+		function removeUsuarioAjax(id){
+			$.ajax({
+			    url: '/removerUsuarioAjax/'+id,
+			    type: 'delete',
+			    success: function(response) {
+			    	carregarUsuariosAjax();
+			    }
+		  	});
+		}
+		
+		function buttonRemover(id){
+			$('body').on('click', '.buttonRemover', function(event) {
+				event.stopPropagation();
+				removeUsuarioAjax($(this).siblings('.id').val());
+			});
+		}
+		
+		function carregarUsuarioAjax(id, modal, locationId){
+			$.ajax({
+			    url: '/carregarUsuarioAjax/'+id,
+			    type: 'post',
+			    success: function(response) {
+			    	$modal = $('#'+modal);
+					$modal.find('#'+locationId).replaceWith($(response).find('#'+locationId));
+					$modal.modal();
+			    }
+		  	});
+		}
+		
+		function carregarUsuariosAjax(){
+			$.ajax({
+			    url: '/carregarUsuariosAjax',
+			    type: 'post',
+			    success: function(response) {
+		      		$('#usuarios').replaceWith($(response));
+			    }
+		  	});
+		}
+	</script>
+</html>

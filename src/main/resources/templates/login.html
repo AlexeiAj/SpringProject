@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://thymeleaf.org/" xmlns:layout="http://ultraq.net.nz/thymeleaf/layout/" layout:decorator="layout">
+
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, user-scalable=no" />
+		<link href="webjars/bootstrap/4.1.3/css/bootstrap.min.css" rel="stylesheet" />
+	</head>
+
+	<body>
+		<div class="container">
+			<div class="position-relative overflow-hidden text-center bg-dark text-white" style="background-image: url(/images/header2.jpg);">
+				<img th:src="@{'/images/logo.png'}" class="img-fluid p-3 p-md-5">
+			</div>
+			<h1 th:text="#{label.bem.vindo.ao.meu.website}"></h1>
+			<p class="lead" th:text="#{label.pagina.de.login}"></p>
+	
+			<div class="row">
+				<div class="col-md-4"></div>
+				<div class="col-md-4">
+					<form action="" th:action="@{/logar}" th:object="${usuario}" th:method="post">
+						<div class="form-group">
+							<label th:text="#{label.login}"></label>
+							<input type="text" class="form-control" th:placeholder="#{label.login}" th:field="*{login}"/>
+							<small class="form-text text-muted" th:if="${#fields.hasErrors('login')}" th:errors="*{login}"></small>
+						</div>
+						<div class="form-group">
+							<label th:text="#{label.senha}"></label>
+						    <input type="text" class="form-control" th:placeholder="#{label.senha}" th:field="*{senha}"/>
+						    <small class="form-text text-muted" th:if="${#fields.hasErrors('senha')}" th:errors="*{senha}"></small>
+						</div>
+						<button type="submit" class="btn btn-dark" th:text="#{label.entrar}"></button>
+					</form>
+				</div>
+				<div class="col-md-4"></div>
+			</div>
+			
+			<div class="col-md-12">
+				<a class="btn btn-dark" href="/cadastroUsuarios"><span th:text="#{label.lista.usuarios}"></span></a>
+			</div>
+			
+			<hr />
+			<footer class="footer">
+				<p th:text="#{label.footer.dev}"></p>
+			</footer>
+		</div>
+	
+		<script src="webjars/jquery/3.1.1/jquery.min.js"></script>
+		<script src="webjars/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+	</body>
+	
+	<script th:inline="javascript">
+	    var message = [[${message}]];
+	    if(message != null) alert(message);
+	</script>
+</html>

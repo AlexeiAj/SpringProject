@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html xmlns:th="http://thymeleaf.org/" xmlns:layout="http://ultraq.net.nz/thymeleaf/layout/" layout:decorator="layout">
+
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, user-scalable=no" />
+		<link href="webjars/bootstrap/4.1.3/css/bootstrap.min.css" rel="stylesheet" />
+		<link rel="shortcut icon" href="/images/logo.ico" />
+		<title>AlexeiAj</title>
+		<style>
+			.linha:hover{
+				opacity: 0.9;
+				cursor: pointer;
+			}
+			.linhaGaleria:hover{
+				opacity: 0.9;
+				cursor: pointer;
+			}
+		</style>
+	</head>
+
+	<body class="bg-white">
+		<nav class="navbar navbar-expand-lg navbar-light bg-light">
+			<a class="navbar-brand" href="/website">
+	          <img th:src="@{'/images/home.svg'}" style="width:20px">
+	        </a>
+			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+	
+			<div class="collapse navbar-collapse" id="navbarSupportedContent">
+				<ul class="navbar-nav mr-auto">
+					<li class="nav-item"><a class="nav-link" href="/galeria">Galeria</a></li>
+				</ul>
+				<ul class="navbar-nav mr-auto">
+					<li class="nav-item"><a class="nav-link" href="http://alexeiaj.duckdns.org:8700" style="color:orange;">▀▄▀▄▀▄ Nᴀᴠᴇ Gᴀᴍᴇ ▄▀▄▀▄▀</a></li>
+					<li class="nav-item"><a class="nav-link" href="http://alexeiaj.duckdns.org:8600" style="color:orange;">▀▄▀▄▀▄ Unity Projects ▄▀▄▀▄▀</a></li>
+				</ul>
+				<form action="" class="form-inline my-2 my-lg-0 ml-auto" th:action="@{/filtrarPostsAjax}" th:method="post" th:object="${filtro}">
+					<input class="form-control mr-sm-2" type="search" th:placeholder="#{label.buscar}" th:field="*{pesquisa}">
+					<button class="btn btn-outline-dark my-2 my-sm-0" type="submit" th:text="#{label.buscar}"></button>
+				</form>
+			</div>
+		</nav>
+		
+		<div class="position-relative overflow-hidden p-3 p-md-5 text-center bg-dark text-white" style="background-image: url(/images/header2.jpg);">
+			<img th:src="@{'/images/logo.png'}" class="img-fluid p-3 p-md-5 m-3 m-md-5">
+		</div>
+		
+		<div class="container">
+			<div class="row">
+				<div class="col-md-12">
+					<div class="position-relative overflow-hidden p-3 p-md-5 m-md-3 text-center bg-light">
+						<div th:fragment="fragment-posts" id="posts">
+							<div th:if="${posts} and !${posts.empty}">
+								<div th:each="post : ${posts}">
+									<div class="bg-dark text-white text-center position-relative overflow-hidden p-3 p-md-5 linha" th:style="'border-radius: 6px 6px 0 0; background-image: url(\'' + ${post.conteudoJson.imagem} +'\');'">
+										<h1 th:text="${post.post_titulo}"></h1>
+									</div>
+									<div class="bg-white p-3 p-md-5 mb-5" style="border-radius: 0 0 6px 6px">
+										<small th:text="${post.post_data}"></small>
+										<small th:text="${post.post_categoria}"></small>
+										<br/><span th:text="${post.texto}"></span>
+										<div class="d-flex justify-content-between align-items-center flex-row-reverse">
+											<div class="btn-group">
+								                <button type="button" class="btn btn-outline-light buttonAlterar"><img th:src="@{'/images/baseline-edit-24px.svg'}"/></button>
+								                <button type="button" class="btn btn-outline-light buttonRemover"><img th:src="@{'/images/baseline-delete-24px.svg'}"/></button>
+												<input type="hidden" class="id" th:value="${post.id}"/>
+							                </div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div th:if="!${posts} or ${posts.empty}">
+								<hr/>
+								<small th:text="#{label.sem.resultado}"></small>
+								<hr/>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<div class="col-md-12">
+			<button type="button" class="btn btn-outline-light" id="buttonAdicionar"><img th:src="@{'/images/baseline-add-24px.svg'}"/></button>
+		</div>
+		
+		<hr/><footer class="footer text-center"><p th:text="#{label.footer.dev}"></p></footer>
+		
+		<script src="webjars/jquery/3.1.1/jquery.min.js"></script>
+		<script src="webjars/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+	</body>
+	
+	<div class="modal" id="modalGaleria" style="z-index:9999;">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div th:fragment="fragment-imagens" id="imagens">
+					<div class="overflow-hidden bg-light">
+						<div th:if="${imagens} and !${imagens.empty}">
+							<div class="row">
+								<div class="col-md-4" th:each="imagem : ${imagens}">
+									<div class="bg-white linhaGaleria text-center p-1 p-md-1 m-1 m-md-1">
+										<img th:src="${imagem.imagem_path} + ${imagem.imagem_name}" style="width:100%;height:150px;"/>
+										<input type="hidden" class="id" th:value="${imagem.imagem_path} + ${imagem.imagem_name}"/>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				<div th:if="!${imagens} or ${imagens.empty}">
+					<hr/>
+					<small th:text="#{label.sem.resultado}"></small>
+					<hr/>
+				</div></div>
+				
+				<div class="modal-footer">
+					<button type="button" class="btn btn-dark" id="fecharGaleria" data-dismiss="modal" th:text="#{label.fechar}"></button>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<div class="modal" id="modalAdicionar">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div th:fragment="fragment-form">
+					<form action="" th:action="@{/adicionarPostAjax}" th:method="post" th:object="${post}">
+						<div id="formBodyAdicionar">
+							<div class="modal-header">
+								<h4 class="modal-title" th:text="#{label.adicionar.post}"></h4>
+								<button type="button" class="close" data-dismiss="modal">&times;</button>
+							</div>
+					
+							<div class="modal-body">
+								<div class="form-group">
+									<b><label th:text="#{label.titulo}"></label></b>
+									<input type="text" class="form-control" th:placeholder="#{label.titulo}" th:field="*{post_titulo}"/>
+									<small class="form-text text-muted" th:if="${#fields.hasErrors('post_titulo')}" th:classappend="${#fields.hasErrors('post_titulo')} ? has-error" th:errors="*{post_titulo}"></small>
+								</div>
+								<div class="form-group">
+									<b><label th:text="#{label.data}"></label></b>
+								    <input type="date" class="form-control" th:placeholder="#{label.data}" th:field="*{post_data}"/>
+								    <small class="form-text text-muted" th:classappend="${#fields.hasErrors('post_data')} ? has-error" th:if="${#fields.hasErrors('post_data')}" th:errors="*{post_data}"></small>
+								</div>
+								<div class="form-group">
+									<b><label th:text="#{label.categoria}"></label></b>
+								    <input type="text" class="form-control" th:placeholder="#{label.categoria}" th:field="*{post_categoria}"/>
+								    <small class="form-text text-muted" th:classappend="${#fields.hasErrors('post_categoria')} ? has-error" th:if="${#fields.hasErrors('post_categoria')}" th:errors="*{post_categoria}"></small>
+								</div>
+								<div th:object="${conteudoJson}">
+									<div class="form-group">
+										<b><label th:text="#{label.texto}"></label></b>
+									    <textarea class="form-control" th:field="*{texto}"></textarea>
+									</div>
+									<div class="form-group">
+										<b><label th:text="#{label.imagem}"></label></b>&nbsp;<label class="imagemSelecionadaText"></label>
+										<input type="hidden" class="imagemSelecionada" th:field="*{imagem}"/>
+										<button type="button" class="btn btn-light" onclick="galeria()" th:text="#{label.imagem}" style="float:right; border:1px solid #ced4da;"></button>
+									</div>
+								</div>
+								<button type="submit" class="btn btn-dark" th:text="#{label.salvar}"></button>
+							</div>
+						</div>
+					</form>
+				</div>
+				
+				<div class="modal-footer">
+					<button type="button" class="btn btn-dark" data-dismiss="modal" th:text="#{label.fechar}"></button>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<div class="modal" id="modalAlterar">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div th:fragment="fragment-form">
+					<form action="" th:action="@{/alterarPostAjax}" th:method="put" th:object="${post}">
+						<div id="formBodyAlterar">
+							<div class="modal-header">
+								<h4 class="modal-title" th:text="#{label.alterar.post}"></h4>
+								<button type="button" class="close" data-dismiss="modal">&times;</button>
+							</div>
+					
+							<div class="modal-body">
+								<div class="form-group">
+									<b><label th:text="#{label.titulo}"></label></b>
+									<input type="text" class="form-control" th:placeholder="#{label.titulo}" th:field="*{post_titulo}"/>
+									<small class="form-text text-muted" th:if="${#fields.hasErrors('post_titulo')}" th:classappend="${#fields.hasErrors('post_titulo')} ? has-error" th:errors="*{post_titulo}"></small>
+								</div>
+								<div class="form-group">
+									<b><label th:text="#{label.data}"></label></b>
+								    <input type="date" class="form-control" th:placeholder="#{label.data}" th:field="*{post_data}"/>
+								    <small class="form-text text-muted" th:classappend="${#fields.hasErrors('post_data')} ? has-error" th:if="${#fields.hasErrors('post_data')}" th:errors="*{post_data}"></small>
+								</div>
+								<div class="form-group">
+									<b><label th:text="#{label.categoria}"></label></b>
+								    <input type="text" class="form-control" th:placeholder="#{label.categoria}" th:field="*{post_categoria}"/>
+								    <small class="form-text text-muted" th:classappend="${#fields.hasErrors('post_categoria')} ? has-error" th:if="${#fields.hasErrors('post_categoria')}" th:errors="*{post_categoria}"></small>
+								</div>
+								<div th:object="${conteudoJson}">
+									<div class="form-group">
+										<b><label th:text="#{label.texto}"></label></b>
+									    <textarea class="form-control" th:field="*{texto}"></textarea>
+									</div>
+									<div class="form-group">
+										<b><label th:text="#{label.imagem}"></label></b>&nbsp;<label class="imagemSelecionadaText" th:text="*{imagem}"></label>
+										<input type="hidden" class="imagemSelecionada" th:field="*{imagem}"/>
+										<button type="button" class="btn btn-light" onclick="galeria()" th:text="#{label.imagem}" style="float:right; border:1px solid #ced4da;"></button>
+									</div>
+								</div>
+								<input type="hidden" th:value="${post.id}" th:field="*{id}"/>
+								<button type="submit" class="btn btn-dark" th:text="#{label.salvar}"></button>
+							</div>
+						</div>
+					</form>
+				</div>
+				
+				<div class="modal-footer">
+					<button type="button" class="btn btn-dark" data-dismiss="modal" th:text="#{label.fechar}"></button>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<div class="modal" id="modalConsultar">
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content">
+				<div th:fragment="fragment-form">
+					<div id="bodyConsultar">
+						<div class="modal-header">
+							<h4 class="modal-title" th:text="${post.post_titulo}"></h4>
+							<button type="button" class="close" data-dismiss="modal">&times;</button>
+						</div>
+				
+						<div class="modal-body">
+							<div class="bg-white p-1 p-md-1 mb-1" style="border-radius: 0 0 6px 6px">
+								<div th:if="${conteudoJson.imagem != null}"><img th:src="${conteudoJson.imagem}" style="width:100%;max-width:900px" class="p-3 p-md-3 text-center"/></div>
+								<div class="form-group">
+								    <span th:text="${post.post_data}"></span>
+								    <span th:text="${post.post_categoria}"></span>
+								</div>
+								<div class="form-group">
+									
+								</div>
+								<div class="form-group">
+								    <span th:text="${conteudoJson.texto}"></span>
+								</div>
+								
+								<input type="hidden" th:value="${post.id}"/>
+							</div>
+						</div>
+					</div>
+				</div>
+				
+				<div class="modal-footer">
+					<button type="button" class="btn btn-dark" data-dismiss="modal" th:text="#{label.fechar}"></button>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<script>
+		$(function() {
+			filtro();
+			buttonRemover();
+			buttonConsultar();
+			modalAdicionar();
+			modalAlterar();
+			selecionaGaleria();
+		});
+		
+		function filtro(){
+			var $form = $('#navbarSupportedContent').find('form');
+			
+			$form.on('submit', function(e) {
+				e.preventDefault();
+				$.ajax({
+				    url: '/filtrarPostsAjax',
+				    type: 'post',
+				    data: $form.serialize(),
+				    success: function(response) {
+			      		$('#posts').replaceWith($(response));
+				    }
+			  	});
+			});
+		}
+		
+		function limparModal(){
+			$('.has-error').removeClass('has-error');
+			$('.form-group :input').val('');
+			$('.form-group small').text('');
+			$('.imagemSelecionada').val('');
+			$('.imagemSelecionadaText').text('');
+		}
+		
+		function modalAdicionar(){
+			if($('#modalAdicionar').find('.text-muted').val() == "") $('#modalAdicionar').modal();
+			var $form = $('#modalAdicionar').find('form');
+			
+			$form.on('submit', function(e) {
+				e.preventDefault();
+			  	$.ajax({
+				    url: $form.attr('action'),
+				    type: $form.attr('method'),
+				    data: $form.serialize(),
+				    success: function(response) {
+				    	if ($(response).find('.has-error').length) $form.find('#formBodyAdicionar').replaceWith($(response).find('#formBodyAdicionar'));
+				    	else $('#modalAdicionar').modal('hide');
+			      		carregarPostsAjax();
+				    }
+			  	});
+			});
+			
+			buttonAdicionar();
+		}
+		
+		function buttonAdicionar(){
+			$('#buttonAdicionar').on('click', function(e) {
+				limparModal();
+				$('#modalAdicionar').modal();
+			});
+		}
+		
+		function modalAlterar(){
+			if($('#modalAlterar').find('.text-muted').val() == "") $('#modalAlterar').modal();
+			var $form = $('#modalAlterar').find('form');
+			
+			$form.on('submit', function(e) {
+				e.preventDefault();
+			  	$.ajax({
+				    url: $form.attr('action'),
+				    type: $form.attr('method'),
+				    data: $form.serialize(),
+				    success: function(response) {
+				    	if ($(response).find('.has-error').length) $form.find('#formBodyAlterar').replaceWith($(response).find('#formBodyAlterar'));
+				    	else $('#modalAlterar').modal('hide');
+			      		carregarPostsAjax();
+				    }
+			  	});
+			});
+			
+			buttonAlterar();
+		}
+		
+		function buttonAlterar(){
+			$('body').on('click', '.buttonAlterar', function(event) {
+				event.stopPropagation();
+				limparModal();
+				carregarPostAjax($(this).siblings('.id').val(), 'modalAlterar', 'formBodyAlterar');
+			});
+		}
+		
+		function buttonConsultar(id){
+			$('body').on('click', '.linha', function(event) {
+				limparModal();
+				carregarPostAjax($(this).parent('div').find('.id').val(), 'modalConsultar', 'bodyConsultar');
+			});
+		}
+		
+		function removePostAjax(id){
+			$.ajax({
+			    url: '/removerPostAjax/'+id,
+			    type: 'delete',
+			    success: function(response) {
+			    	carregarPostsAjax();
+			    }
+		  	});
+		}
+		
+		function buttonRemover(id){
+			$('body').on('click', '.buttonRemover', function(event) {
+				event.stopPropagation();
+				removePostAjax($(this).siblings('.id').val());
+			});
+		}
+		
+		function carregarPostAjax(id, modal, locationId){
+			$.ajax({
+			    url: '/carregarPostAjax/'+id,
+			    type: 'post',
+			    success: function(response) {
+			    	$modal = $('#'+modal);
+					$modal.find('#'+locationId).replaceWith($(response).find('#'+locationId));
+					$modal.modal();
+			    }
+		  	});
+		}
+		
+		function carregarPostsAjax(){
+			$.ajax({
+			    url: '/carregarPostsAjax',
+			    type: 'post',
+			    success: function(response) {
+		      		$('#posts').replaceWith($(response));
+			    }
+		  	});
+		}
+		
+		function carregarImagensAjax(){
+			$.ajax({
+			    url: '/carregarImagensSelectAjax',
+			    type: 'post',
+			    success: function(response) {
+		      		$('#imagens').replaceWith($(response));
+			    }
+		  	});
+		}
+
+		function selecionaGaleria(){
+			$('body').on('click', '.linhaGaleria', function(event) {
+				$('.imagemSelecionada').val($(this).parent('div').find('.id').val());
+				$('.imagemSelecionadaText').text($(this).parent('div').find('.id').val());
+				$('#fecharGaleria').click();
+				$('body').addClass('modal-open'); // re-open modal class
+			});
+		}
+		
+		function galeria(){
+			carregarImagensAjax();
+			$('#modalGaleria').modal();
+		}
+	</script>
+</html>
