@@ -13,6 +13,20 @@
             <version>2.1.0.RELEASE</version>
         </dependency>
         
+        <!-- para usar a segurança e bloquear as telas -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+            <version>2.1.0.RELEASE</version>
+        </dependency>
+        
+        <!-- para usar o token e deixar a aplicacao stateless -->
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt</artifactId>
+            <version>0.9.1</version>
+        </dependency>
+        
         <!-- usar th -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

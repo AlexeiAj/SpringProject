@@ -1,12 +1,11 @@
 package br.com.alexei.websiteSpringBoot.controller;
 
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -21,7 +20,7 @@ import br.com.alexei.websiteSpringBoot.service.UsuarioService;
 
 @Controller
 public class UsuarioController {
-	
+
 	@Autowired
 	private UsuarioService usuarioService;
 
@@ -52,6 +51,7 @@ public class UsuarioController {
 	public String adicionarUsuarioAjax(@ModelAttribute("usuario") @Valid Usuario usuario, BindingResult bindingResult) {
 		if (bindingResult.hasErrors()) return "cadastroUsuarios :: fragment-form";
 		
+		usuario.setSenha(new BCryptPasswordEncoder().encode(usuario.getSenha()));
 		usuarioService.save(usuario);
 		return "cadastroUsuarios";
 	}
@@ -60,6 +60,7 @@ public class UsuarioController {
 	public String alterarUsuarioAjax(@ModelAttribute("usuario") @Valid Usuario usuario, BindingResult bindingResult) {
 		if (bindingResult.hasErrors()) return "cadastroUsuarios :: fragment-form";
 		
+		usuario.setSenha(new BCryptPasswordEncoder().encode(usuario.getSenha()));
 		usuarioService.edit(usuario);
 		return "cadastroUsuarios";
 	}
@@ -76,16 +77,16 @@ public class UsuarioController {
 		mv.addObject("usuario", new Usuario());
 		return mv;
 	}
-	
-	@RequestMapping("/logar")
-    public String logar(@ModelAttribute("usuario") @Valid Usuario usuario, BindingResult bindingResult, HttpSession session, Model model) {
-        if (bindingResult.hasErrors()) return "login";
-        if(!usuarioService.exist(usuario)) {
-        	model.addAttribute("message", "Usuario Não Existente");
-        	return "login";
-        }
 
-        session.setAttribute("usuarioLogado", usuario);
-        return "redirect:website";
-    }
+//	  @RequestMapping("/logar")
+//    public String logar(@ModelAttribute("usuario") @Valid Usuario usuario, BindingResult bindingResult, HttpSession session, Model model) {
+//        if (bindingResult.hasErrors()) return "login";
+//        if(!usuarioService.exist(usuario)) {
+//        	model.addAttribute("message", "Usuario Não Existente");
+//        	return "login";
+//        }
+//
+//        session.setAttribute("usuarioLogado", usuario);
+//        return "redirect:website";
+//    }
 }

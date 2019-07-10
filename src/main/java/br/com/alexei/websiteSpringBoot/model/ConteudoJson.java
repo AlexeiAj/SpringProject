@@ -19,7 +19,6 @@ public class ConteudoJson {
 	public void setTexto(String texto) {
 		this.texto = texto;
 	}
-	
 	public String getJson() {
 		return new Gson().toJson(this);
 	}
