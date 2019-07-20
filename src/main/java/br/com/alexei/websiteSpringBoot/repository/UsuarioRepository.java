@@ -10,8 +10,8 @@ import br.com.alexei.websiteSpringBoot.model.Usuario;
 
 public interface UsuarioRepository extends CrudRepository<Usuario, Integer>{
 	
-	@Query(value = "select u.id from Usuarios u where u.login = ?1 and u.senha = ?2 ", nativeQuery = true)
-	List<Integer> getByLoginESenha(String login, String senha);
+//	@Query(value = "select u.id from Usuarios u where u.login = ?1 and u.senha = ?2 ", nativeQuery = true)
+//	List<Integer> getByLoginESenha(String login, String senha);
 	
 	Optional<Usuario> findByLogin(String login);
 	

@@ -22,11 +22,11 @@ public class Usuario implements UserDetails{
 	private Integer id;
 	
 	@NotNull
-    @Size(min=5, max=10)
+    @Size(min=5, max=20)
 	private String login;
 	
 	@NotNull
-    @Size(min=5, max=10)
+    @Size(min=5, max=255)
 	private String senha;
 	
 	public Integer getId() {

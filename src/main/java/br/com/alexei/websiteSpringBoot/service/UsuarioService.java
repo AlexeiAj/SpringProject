@@ -38,7 +38,7 @@ public class UsuarioService {
 		repository.deleteById(id);
 	}
 	
-	public boolean exist(Usuario usuario) {
-		return repository.getByLoginESenha(usuario.getLogin(), usuario.getSenha()).size() > 0 && !repository.getByLoginESenha(usuario.getLogin(), usuario.getSenha()).isEmpty() && repository.getByLoginESenha(usuario.getLogin(), usuario.getSenha()) != null;
-	}
+//	public boolean exist(Usuario usuario) {
+//		return repository.getByLoginESenha(usuario.getLogin(), usuario.getSenha()).size() > 0 && !repository.getByLoginESenha(usuario.getLogin(), usuario.getSenha()).isEmpty() && repository.getByLoginESenha(usuario.getLogin(), usuario.getSenha()) != null;
+//	}
 }

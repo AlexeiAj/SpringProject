@@ -5,7 +5,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -76,13 +75,14 @@ public class GaleriaController {
 			return "redirect:galeria";
 		}
 		
-		String PATH_FILE = Paths.get("").toAbsolutePath().toString() + "\\images\\galeria\\";
+		String PATH_FILE = Paths.get("").toAbsolutePath().toString() + "\\src\\main\\resources\\public\\images\\galeria\\";
 		String NOME = file.getOriginalFilename();
 		
         try {
             byte[] bytes = file.getBytes();
             Path path = Paths.get(PATH_FILE + NOME);
             Files.write(path, bytes);
+            
         } catch (IOException e) {
             e.printStackTrace();
         }
