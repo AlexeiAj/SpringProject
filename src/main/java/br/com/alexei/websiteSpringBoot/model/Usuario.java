@@ -50,7 +50,7 @@ public class Usuario implements UserDetails{
 	
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return Collections.EMPTY_LIST;
+		return Collections.emptyList();
 	}
 	@Override
 	public String getPassword() {
