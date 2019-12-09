@@ -31,7 +31,9 @@ public class UsuarioControllerRest {
 	
 	@GetMapping
 	public List<Usuario> usuarios() {
-		return (List<Usuario>) usuarioService.findAll();
+		Iterable<Usuario> usuarios = usuarioService.findAll();
+		usuarios.forEach(u -> u.setSenha("*******"));
+		return (List<Usuario>) usuarios;
 	}
 	
 	@GetMapping("/{id}")
