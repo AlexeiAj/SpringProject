@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -29,7 +30,8 @@ public class PostControllerRest {
 	private PostService postService;
 	
 	@GetMapping
-	public List<Post> posts() {
+	public List<Post> posts(@RequestParam(value = "search", required = false) String search) {
+		if(search != null) return (List<Post>) postService.findPostByTituloECategoria(search);
 		return (List<Post>) postService.findAll();
 	}
 	
