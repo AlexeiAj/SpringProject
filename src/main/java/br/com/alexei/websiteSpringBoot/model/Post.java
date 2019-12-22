@@ -33,6 +33,11 @@ public class Post {
 		if(getConteudoJson().getTexto() != null) return getConteudoJson().getTexto();
 		return "";
 	}
+	
+	public String getLink() {
+		if(getConteudoJson().getLink() != null) return getConteudoJson().getLink();
+		return "";
+	}
 
 	public Integer getId() {
 		return id;

@@ -6,6 +6,7 @@ public class ConteudoJson {
 	
 	private String imagem;
 	private String texto;
+	private String link;
 	
 	public String getImagem() {
 		return imagem;
@@ -18,6 +19,12 @@ public class ConteudoJson {
 	}
 	public void setTexto(String texto) {
 		this.texto = texto;
+	}
+	public String getLink() {
+		return link;
+	}
+	public void setLink(String link) {
+		this.link = link;
 	}
 	public String getJson() {
 		return new Gson().toJson(this);
