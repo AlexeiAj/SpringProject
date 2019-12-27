@@ -1,5 +1,6 @@
 Manifest-Version: 1.0
-Built-By: DFEX
-Build-Jdk: 1.8.0_211
+Implementation-Title: gs-spring-boot-docker
+Implementation-Version: 0.1.0
+Build-Jdk-Spec: 1.8
 Created-By: Maven Integration for Eclipse
 

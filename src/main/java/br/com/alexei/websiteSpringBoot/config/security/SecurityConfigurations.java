@@ -72,7 +72,7 @@ public class SecurityConfigurations extends WebSecurityConfigurerAdapter{
 			.antMatchers("/adicionarImagemAjax/**").permitAll()
 			.antMatchers("/removeImagemAjax/**").permitAll()
 			
-			.antMatchers("/usuarios/**").permitAll()
+			.antMatchers("/actuator/**").permitAll()
 			.antMatchers("/images/**").permitAll()
 			.antMatchers("/webjars/**").permitAll()
 			.antMatchers(HttpMethod.POST, "/auth").permitAll()
